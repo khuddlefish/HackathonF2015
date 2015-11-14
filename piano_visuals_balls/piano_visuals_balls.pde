@@ -13,8 +13,8 @@ int blue = 100;
 ArrayList<bouncingBall> balls = new ArrayList<bouncingBall>();
 
 void setup() {
-  size(400, 400);
-
+  //size(400, 400);
+  fullScreen();
   //Initiate array
   for (int i = 0; i < circles.length; i++) {
     circles[i] = 10;
@@ -69,7 +69,7 @@ void midiMessage(MidiMessage message) {
   }
   
   if (zero == 144) {
-    balls.add(new bouncingBall(((width/60)*one), height - two*2));
+    balls.add(new bouncingBall(((width/25)*((one+2)%25)), height - two*2));
   }
 }
 
