@@ -1,54 +1,68 @@
-import themidibus.*; //Import the library
-import javax.sound.midi.MidiMessage; //Import the MidiMessage classes http://java.sun.com/j2se/1.5.0/docs/api/javax/sound/midi/MidiMessage.html
+import themidibus.*;
+import javax.sound.midi.MidiMessage;
 import javax.sound.midi.SysexMessage;
 import javax.sound.midi.ShortMessage;
 
-MidiBus myBus; // The MidiBus
-
-void setup() {
-  size(400, 400);
-
-  MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
-  myBus = new MidiBus(this, 0, 0); // Create a new MidiBus object
-
-  // On mac you will need to use MMJ since Apple's MIDI subsystem doesn't properly support SysEx. 
-  // However MMJ doesn't support sending timestamps so you have to turn off timestamps.
-  myBus.sendTimestamps(false);
-}
+MidiBus myBus; 
 
 //Instance variables
+int[] circles = new int[8]; //Array for circle sizes. 
 int red = 0;
 int green = 0;
 int blue = 0;
-int r;
+
+void setup() {
+  size(400, 400);
+  
+  //Initiate array
+  for (int i = 0; i < circles.length; i++) {
+      circles[i] = 10;
+   }
+  
+  //Midibus stuff, no idea what it does, but works, don't change it.
+  MidiBus.list(); 
+  myBus = new MidiBus(this, 0, 0);
+  myBus.sendTimestamps(false);
+}
 
 void draw() {
-  background(255);
-  stroke(red, blue, green);
-  ellipse(width/2, height/2, r, r);
+  background(red, green, blue); //Redraw background based on RGB from knobs
+  
+  //Draw circles
+  int circlePosition = 55;
+  noFill();
+  for (int i = 0; i < circles.length; i++) {
+      ellipse (circlePosition, 50, circles[i], circles[i]);
+      circlePosition += 40;
+  }
+  
 }
 
 void midiMessage(MidiMessage message) {
+  
+  //Print the MIDI input in the console, don't change. 
   println();
   println("MidiMessage Data:");
   println("--------");
   println("Status Byte/MIDI Command:"+message.getStatus());
   for (int i = 1;i < message.getMessage().length;i++) {
     println("Param "+(i+1)+": "+(int)(message.getMessage()[i] & 0xFF));
-  }  
+  }
+  
+  //Variables with the MIDI input messages.
   int zero = (int)(message.getMessage()[0]& 0xFF);
   int one = (int)(message.getMessage()[1]& 0xFF);
   int two = (int)(message.getMessage()[2]& 0xFF);
-  if(zero == 176){
-    knob(one, two);
-  }
   
-  r = (int)(message.getMessage()[2] & 0xFF);
-
+  //Check if a knob is being turned. 
+  if (zero == 176 && one < 29 && one > 20) {
+    knobRGB(one, two); //Set RGB values.
+    circles [one - 21] = two; //Set circle radious. 
+  }
+     
 }
-//1: 21 --> 28
-//2: 0 - 127 --> rgb * 2
-void knob(int knobNum, int cValue){
+
+void knobRGB(int knobNum, int cValue){
     if(knobNum == 21){
       red = cValue*2;
     }else if(knobNum == 22){
@@ -56,10 +70,4 @@ void knob(int knobNum, int cValue){
     }else if(knobNum ==23){
       blue = cValue*2;
     }
-}
-
-
-void delay(int time) {
-  int current = millis();
-  while (millis () < current+time) Thread.yield();
 }
