@@ -37,21 +37,10 @@ void draw() {
   graph.display(n, dim, red, green, blue);
   
   //Draw circles based on knobs
-  int circlePosition = 55;
-  noFill();
-  for (int i = 0; i < circles.length; i++) {
-    if (i==0) stroke(200,50,50);
-    else if (i==1) stroke(50,200,50);
-    else if (i==2) stroke(50,50,200);
-    else stroke(0,0,0);
-    ellipse (circlePosition, 50, circles[i], circles[i]);
-    circlePosition += 40;
-  }
+  drawKnobs();
   
   //Draw and move bouncing balls
-  for (int i = 0; i < balls.size(); i++) {
-    balls.get(i).run();
-  } 
+  drawBalls(); 
   
    n += (noise(time)-0.5)*0.1;
   time += 0.1;
@@ -93,5 +82,24 @@ void knobRGB(int knobNum, int cValue) {
     green = cValue*2;
   } else if (knobNum ==23) {
     blue = cValue*2;
+  }
+}
+
+void drawKnobs(){
+  int circlePosition = 55;
+  noFill();
+  for (int i = 0; i < circles.length; i++) {
+    if (i==0) stroke(200,50,50);
+    else if (i==1) stroke(50,200,50);
+    else if (i==2) stroke(50,50,200);
+    else stroke(0,0,0);
+    ellipse (circlePosition, 50, circles[i], circles[i]);
+    circlePosition += 40;
+  }
+}
+
+void drawBalls(){
+  for (int i = 0; i < balls.size(); i++) {
+    balls.get(i).run();
   }
 }
