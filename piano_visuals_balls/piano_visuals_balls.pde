@@ -10,11 +10,15 @@ int[] circles = new int[8]; //Array for circle sizes.
 int red = 100;
 int green = 100;
 int blue = 100;
+float n = 0.0;
+float dim = 25.0;
+float time = 0;
 ArrayList<bouncingBall> balls = new ArrayList<bouncingBall>();
+spiralGraph graph = new spiralGraph();
 
 void setup() {
-  //size(400, 400);
-  fullScreen();
+  size(400, 400);
+  //fullScreen();
   //Initiate array
   for (int i = 0; i < circles.length; i++) {
     circles[i] = 10;
@@ -28,7 +32,10 @@ void setup() {
 
 void draw() {
   background(red, green, blue); //Redraw background based on RGB from knobs
-
+  
+  //Display trippy graph
+  graph.display(n, dim, red, green, blue);
+  
   //Draw circles based on knobs
   int circlePosition = 55;
   noFill();
@@ -41,9 +48,13 @@ void draw() {
     circlePosition += 40;
   }
   
+  //Draw and move bouncing balls
   for (int i = 0; i < balls.size(); i++) {
     balls.get(i).run();
   } 
+  
+   n += (noise(time)-0.5)*0.1;
+  time += 0.1;
 }
 
 void midiMessage(MidiMessage message) {
@@ -70,6 +81,8 @@ void midiMessage(MidiMessage message) {
   
   if (zero == 144) {
     balls.add(new bouncingBall(((width/25)*((one+2)%25)), height - two*2));
+    n += ((one+2)%25)-12;
+    dim = two/2;
   }
 }
 
