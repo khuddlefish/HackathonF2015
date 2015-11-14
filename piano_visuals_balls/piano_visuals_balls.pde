@@ -10,11 +10,15 @@ int[] circles = new int[8]; //Array for circle sizes.
 int red = 100;
 int green = 100;
 int blue = 100;
+float n = 0.0;
+float dim = 25.0;
+float time = 0;
 ArrayList<bouncingBall> balls = new ArrayList<bouncingBall>();
+spiralGraph graph = new spiralGraph();
 
 void setup() {
   size(400, 400);
-
+  //fullScreen();
   //Initiate array
   for (int i = 0; i < circles.length; i++) {
     circles[i] = 10;
@@ -28,22 +32,18 @@ void setup() {
 
 void draw() {
   background(red, green, blue); //Redraw background based on RGB from knobs
-
-  //Draw circles based on knobs
-  int circlePosition = 55;
-  noFill();
-  for (int i = 0; i < circles.length; i++) {
-    if (i==0) stroke(200,50,50);
-    else if (i==1) stroke(50,200,50);
-    else if (i==2) stroke(50,50,200);
-    else stroke(0,0,0);
-    ellipse (circlePosition, 50, circles[i], circles[i]);
-    circlePosition += 40;
-  }
   
-  for (int i = 0; i < balls.size(); i++) {
-    balls.get(i).run();
-  } 
+  //Display trippy graph
+  graph.display(n, dim, red, green, blue);
+  
+  //Draw circles based on knobs
+  drawKnobs();
+  
+  //Draw and move bouncing balls
+  drawBalls(); 
+  
+   n += (noise(time)-0.5)*0.1;
+  time += 0.1;
 }
 
 void midiMessage(MidiMessage message) {
@@ -69,7 +69,9 @@ void midiMessage(MidiMessage message) {
   }
   
   if (zero == 144) {
-    balls.add(new bouncingBall(((width/60)*one), height - two*2));
+    balls.add(new bouncingBall(((width/25)*((one+2)%25)), height - two*2));
+    n += ((one+2)%25)-12;
+    dim = two/2;
   }
 }
 
@@ -80,5 +82,24 @@ void knobRGB(int knobNum, int cValue) {
     green = cValue*2;
   } else if (knobNum ==23) {
     blue = cValue*2;
+  }
+}
+
+void drawKnobs(){
+  int circlePosition = 55;
+  noFill();
+  for (int i = 0; i < circles.length; i++) {
+    if (i==0) stroke(200,50,50);
+    else if (i==1) stroke(50,200,50);
+    else if (i==2) stroke(50,50,200);
+    else stroke(0,0,0);
+    ellipse (circlePosition, 50, circles[i], circles[i]);
+    circlePosition += 40;
+  }
+}
+
+void drawBalls(){
+  for (int i = 0; i < balls.size(); i++) {
+    balls.get(i).run();
   }
 }
