@@ -8,9 +8,10 @@ import ddf.minim.ugens.*;
 MidiBus myBus; 
 Minim minim;
 AudioOutput out;
+AudioPlayer song;
 Squarefield squarefield;
 HackInstrument instrument;
-
+InstrumentPresets presets;
 //Instance variables
 ArrayList<int[]> coord = new ArrayList<int[]>();
 ArrayList<Integer> xCoor = new ArrayList<Integer>();
@@ -41,7 +42,13 @@ void setup() {
   minim = new Minim(this);
  
   out = minim.getLineOut();
-  InstrumentPresets presets = new InstrumentPresets();
+  
+  String[] songs = loadStrings("song.txt");
+  song = minim.loadFile(songs[0]);
+  song.play();
+  
+  
+  presets = new InstrumentPresets();
   instrument = presets.preset(7);
   
   squarefield = new Squarefield();
@@ -132,6 +139,13 @@ void midiMessage(MidiMessage message) {
   if (zero == 176 && one < 29 && one > 20)  {
     knobRGB(one, two); //Set RGB values.
     circles [one - 21] = two; //Set circle radious.
+    
+    if(one == 21){
+       presets.setCutoff((float)two*((float)two)); 
+    }
+    if(one == 22){
+       presets.setDelay((float)two/200.); 
+    }
   }
   
   delegate(message);
@@ -146,6 +160,9 @@ void midiMessage(MidiMessage message) {
   
   if (zero == 153){
     modes[one-36] = !modes[one-36];
+    
+    instrument.kill();
+    instrument = presets.preset(one-36);
   }
 }
 

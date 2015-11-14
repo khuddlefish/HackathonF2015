@@ -13,9 +13,9 @@ class spiralGraph{
     float x = -w/2;          // Start x at -1 * width / 2
     //float n = (mouseX * 10.0) / width;
     loadPixels();
-      for (int i = 0; i < width; i+=4) {
+      for (int i = 0; i < width; i+=5) {
         float y = -h/2;        // Start y at -1 * height / 2
-        for (int j = 0; j < height; j+=4) {
+        for (int j = 0; j < height; j+=5) {
           float r = sqrt((x*x) + (y*y));    // Convert cartesian to polar
           float theta = atan2(y,x);         // Convert cartesian to polar
           // Compute 2D polar coordinate function

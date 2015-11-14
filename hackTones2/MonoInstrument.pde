@@ -23,7 +23,7 @@ class MonoInstrument implements HackInstrument, Instrument{
      slide = new Line(1);
      bend = new Line(0.01, 0, 0);
      vibrato = new Oscil(8, 0, Waves.SINE);
-     osc = new Oscil(440, 0.4, Waves.SAW);
+     osc = new Oscil(440, 0.2, Waves.SAW);
      adsr = new ADSR(1, 0.001, 0.05, 1, 0.05);
      m2h = new Midi2Hz();
      

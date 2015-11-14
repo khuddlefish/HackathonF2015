@@ -9,7 +9,7 @@ class PolyInstrument implements HackInstrument{
       current_voice = 0;
       for(int i = 0; i < num_voices; i++){
          voices[i] = new MonoInstrument(bus); 
-         voices[i].adsr.setParameters(1, 0.001, 5, 0.2, 1, 0, 0); 
+         voices[i].adsr.setParameters(0.5, 0.001, 5, 0.2, 1, 0, 0); 
          voices[i].vibrato.setFrequency(5);
       }
     }
