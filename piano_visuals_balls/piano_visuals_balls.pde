@@ -35,6 +35,7 @@ void draw() {
   
   //Display trippy graph
   graph.display(n, dim, red, green, blue);
+  n += (noise(time)-0.5)*0.1; time += 0.1;
   
   //Draw circles based on knobs
   drawKnobs();
@@ -42,8 +43,8 @@ void draw() {
   //Draw and move bouncing balls
   drawBalls(); 
   
-   n += (noise(time)-0.5)*0.1;
-  time += 0.1;
+
+  
 }
 
 void midiMessage(MidiMessage message) {
@@ -63,7 +64,7 @@ void midiMessage(MidiMessage message) {
   int two = (int)(message.getMessage()[2]& 0xFF);
 
   //Check if a knob is being turned. 
-  if (zero == 176 && one < 29 && one > 20) {
+  if (zero == 1) {
     knobRGB(one, two); //Set RGB values.
     circles [one - 21] = two; //Set circle radious.
   }

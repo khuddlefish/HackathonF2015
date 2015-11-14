@@ -7,7 +7,6 @@
   
   //drawing function for this mode
   void draw38() {
-    background(0,0,0);
     for (int i = 0; i < numItems; i++) {
       noStroke();
       fill(colors.get(i).first, colors.get(i).second, colors.get(i).third);
