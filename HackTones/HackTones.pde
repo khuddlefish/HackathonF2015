@@ -10,7 +10,7 @@ MidiBus myBus;
 Minim       minim;
 AudioOutput out;
 
-MonoInstrument mono;
+HackInstrument instrument;
 void setup()
 {
   size(512, 200, P3D);
@@ -22,7 +22,11 @@ void setup()
  
   // use the getLineOut method of the Minim object to get an AudioOutput object
   out = minim.getLineOut();
-  mono = new MonoInstrument();
+  //MonoInstrument mono = new MonoInstrument();
+  //mono.osc.setWaveform(Waves.TRIANGLE);
+  //PolyInstrument poly = new PolyInstrument();
+  InstrumentPresets presets = new InstrumentPresets();
+  instrument = presets.preset(2);
 }
  
 void draw()
@@ -56,15 +60,14 @@ void rawMidi(byte[] data) { // You can also use rawMidi(byte[] data, String bus_
   switch((int)(data[0] & 0xFF)){
     case 176:
       if(data[1] == 1){
-        mono.setVibrato((int)(data[2] & 0xFF)); 
+        instrument.setVibrato((int)(data[2] & 0xFF)); 
       }
       break;
     case 144:
-      mono.setNote(data[1]);
-      mono.noteOn(1);
+      instrument.playNote(data[1], (int)(data[2]&0xFF));
       break;
     case 128:
-      mono.noteOff();
+      instrument.noteOff(data[1]);
       break;
     default:
       break;

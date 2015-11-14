@@ -1,12 +1,7 @@
-class HackInstrument implements Instrument
+interface HackInstrument
 {
-  Oscil osc;
-  void noteOn(float dur)
-  {
-    
-  }
-  void noteOff()
-  {
-    
-  }
+  void playNote(int note, int vel);
+  void noteOff(int note);
+  void setVibrato(int vib);
+  void kill();
 }
