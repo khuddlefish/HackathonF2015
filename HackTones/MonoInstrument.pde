@@ -38,6 +38,9 @@ class MonoInstrument implements HackInstrument, Instrument{
      
      osc.patch(filter).patch(adsr);
    }
+   void setCutoff(float cutoff){
+     filter.frequency.setLastValue(cutoff);
+   }
    void setVibrato(int vib){
        vibrato.setAmplitude((float)vib/127.);
    }

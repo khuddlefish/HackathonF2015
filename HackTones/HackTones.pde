@@ -9,12 +9,12 @@ MidiBus myBus;
 
 Minim       minim;
 AudioOutput out;
-
+Squarefield squarefield;
 HackInstrument instrument;
 void setup()
 {
-  size(512, 200, P3D);
- 
+  size(512, 200);
+   //fullScreen();
    MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
   myBus = new MidiBus(this, 0, 0); // Create a new MidiBus object
   
@@ -26,7 +26,9 @@ void setup()
   //mono.osc.setWaveform(Waves.TRIANGLE);
   //PolyInstrument poly = new PolyInstrument();
   InstrumentPresets presets = new InstrumentPresets();
-  instrument = presets.preset(2);
+  instrument = presets.preset(7);
+  
+  squarefield = new Squarefield();
 }
  
 void draw()
@@ -41,6 +43,8 @@ void draw()
     line( i, 50  - out.left.get(i)*50,  i+1, 50  - out.left.get(i+1)*50 );
     line( i, 150 - out.right.get(i)*50, i+1, 150 - out.right.get(i+1)*50 );
   }
+  
+  squarefield.draw_self();
 }
 
 void rawMidi(byte[] data) { // You can also use rawMidi(byte[] data, String bus_name)
